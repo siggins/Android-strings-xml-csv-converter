@@ -1,0 +1,56 @@
+entity Locale {
+    localeCode String required
+	localeName String required
+    version Integer required
+}
+
+entity VoicePack {
+	name String required
+    version Integer required
+    path String required
+}
+entity Text {
+    longText String 
+    shortText String
+}
+
+entity Button {
+	name String required
+    version Integer required
+    audioPath String 
+}
+
+entity ButtonSet {
+    name String required
+}
+
+entity Customer {
+	name String required
+    purchaseId String required
+}
+
+entity Device {
+	uuid String required
+    lastSeen ZonedDateTime 
+}
+
+relationship ManyToMany {
+	Button{set} to ButtonSet{Button(name)}
+    VoicePack{set} to ButtonSet{Voice(name)}
+}
+
+relationship ManyToOne {
+	Button{Text} to Text
+    VoicePack{lang} to Locale
+	Text{lang} to Locale
+}
+
+relationship OneToMany {
+	Customer{Devices} to Device
+}
+
+paginate Button with infinite-scroll
+paginate Customer with infinite-scroll
+paginate Device with infinite-scroll
+
+dto * with mapstruct
